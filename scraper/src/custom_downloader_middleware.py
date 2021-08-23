@@ -70,7 +70,7 @@ class CustomDownloaderMiddleware:
             body = self.driver.page_source.encode('utf-8')
             url = self.driver.current_url
 
-            with open('/applied2/pages/{}.html'.format(url.replace('/', '-')), 'wb') as f:
+            with open('/applied2/pages2/{}.html'.format(url.replace('/', '-')), 'wb') as f:
                 f.write(body)
 
             return HtmlResponse(
