@@ -14,7 +14,8 @@ from selenium.common.exceptions import NoSuchElementException
 import sys
 
 HEADER_SPAN_XPATH = "//section/article/{}//span"
-HEADER_PRESENCE_XPATH = '//section/article[./h1 or ./h2]'
+ARTICLE_CONTENT_SELECTOR = '//section/article[./h1 or ./h2]'
+SIDEBAR_CONTENT_SELECTOR = '//aside//p'
 
 class CustomDownloaderMiddleware:
     driver = None
@@ -58,13 +59,18 @@ class CustomDownloaderMiddleware:
             WebDriverWait(self.driver, 10).until_not(
                 expected_conditions.presence_of_element_located((By.ID, tempId))
             )
-            # TODO move xpath to top of file
             WebDriverWait(self.driver, 10).until(
-                expected_conditions.presence_of_element_located((By.XPATH, HEADER_PRESENCE_XPATH))
+                expected_conditions.presence_of_element_located((By.XPATH, ARTICLE_CONTENT_SELECTOR))
+            )
+            WebDriverWait(self.driver, 10).until(
+                expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
             )
 
             body = self.driver.page_source.encode('utf-8')
             url = self.driver.current_url
+
+            with open('/applied2/pages/{}.html'.format(url.replace('/', '-')), 'wb') as f:
+                f.write(body)
 
             return HtmlResponse(
                 url=url,
