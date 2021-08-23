@@ -40,31 +40,39 @@ class CustomDownloaderMiddleware:
 
             print("Getting " + request.url + " from selenium")
 
-            tempId = "temp-docsearch-scraper-id"
+            # TODO move to top of file
+            temp_content_id = "temp-docsearch-scraper-content-id"
+            temp_sidebar_id = "temp-docsearch-scraper-sidebar-id"
 
             h1_xpath = HEADER_SPAN_XPATH.format('h1')
             h2_xpath = HEADER_SPAN_XPATH.format('h2')
             if self.element_exists(h1_xpath):
-                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h1_xpath, tempId))
+                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h1_xpath, temp_content_id))
             elif self.element_exists(h2_xpath):
-                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h2_xpath, tempId))
+                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h2_xpath, temp_content_id))
+
+            if self.element_exists(SIDEBAR_CONTENT_SELECTOR):
+                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}'.format(SIDEBAR_CONTENT_SELECTOR, temp_sidebar_id))
 
             self.driver.get(unquote_plus(
                 request.url))  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
             time.sleep(spider.js_wait)
 
-            hash = urlparse(request.url).fragment
-
             # Wait until old section has disappeared and new one is visible
             WebDriverWait(self.driver, 10).until_not(
-                expected_conditions.presence_of_element_located((By.ID, tempId))
+                expected_conditions.presence_of_element_located((By.ID, temp_content_id))
             )
             WebDriverWait(self.driver, 10).until(
                 expected_conditions.presence_of_element_located((By.XPATH, ARTICLE_CONTENT_SELECTOR))
             )
+
+            hash = urlparse(request.url).fragment
             if len(hash) > 0 and hash != '/':
+                WebDriverWait(self.driver, 10).until_not(
+                    expected_conditions.presence_of_element_located((By.ID, temp_sidebar_id))
+                )
                 WebDriverWait(self.driver, 10).until(
-                    expected_conditions.text_to_be_present_in_element((By.XPATH, SIDEBAR_CONTENT_SELECTOR), self.driver.title)
+                    expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
                 )
 
             body = self.driver.page_source.encode('utf-8')
