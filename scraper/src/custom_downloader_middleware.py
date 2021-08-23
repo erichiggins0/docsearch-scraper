@@ -15,7 +15,7 @@ import sys
 
 HEADER_SPAN_XPATH = "//section/article/{}//span"
 ARTICLE_CONTENT_SELECTOR = '//section/article[./h1 or ./h2]'
-SIDEBAR_CONTENT_SELECTOR = '//aside//p'
+SIDEBAR_CONTENT_SELECTOR = "//aside//li[@class='active']"
 
 class CustomDownloaderMiddleware:
     driver = None
