@@ -55,6 +55,8 @@ class CustomDownloaderMiddleware:
                 request.url))  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
             time.sleep(spider.js_wait)
 
+            hash = urlparse(request.url).fragment
+
             # Wait until old section has disappeared and new one is visible
             WebDriverWait(self.driver, 10).until_not(
                 expected_conditions.presence_of_element_located((By.ID, tempId))
@@ -62,9 +64,10 @@ class CustomDownloaderMiddleware:
             WebDriverWait(self.driver, 10).until(
                 expected_conditions.presence_of_element_located((By.XPATH, ARTICLE_CONTENT_SELECTOR))
             )
-            WebDriverWait(self.driver, 10).until(
-                expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
-            )
+            if len(hash) > 0 and hash != '/':
+                WebDriverWait(self.driver, 10).until(
+                    expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
+                )
 
             body = self.driver.page_source.encode('utf-8')
             url = self.driver.current_url
