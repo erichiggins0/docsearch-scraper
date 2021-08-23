@@ -4,7 +4,6 @@ CustomDownloaderMiddleware
 
 import time
 
-
 from scrapy.http import HtmlResponse
 from urllib.parse import urlparse, unquote_plus
 from selenium.webdriver.common.by import By
@@ -66,7 +65,7 @@ class CustomDownloaderMiddleware:
             )
             if len(hash) > 0 and hash != '/':
                 WebDriverWait(self.driver, 10).until(
-                    expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
+                    expected_conditions.expected_conditions.text_to_be_present_in_element((By.XPATH, SIDEBAR_CONTENT_SELECTOR), self.driver.title)
                 )
             else:
                 print('skipped wait')
