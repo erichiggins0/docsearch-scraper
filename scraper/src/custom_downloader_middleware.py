@@ -52,7 +52,7 @@ class CustomDownloaderMiddleware:
                 self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h2_xpath, temp_content_id))
 
             if self.element_exists(SIDEBAR_CONTENT_SELECTOR):
-                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}'.format(SIDEBAR_CONTENT_SELECTOR, temp_sidebar_id))
+                self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(SIDEBAR_CONTENT_SELECTOR, temp_sidebar_id))
 
             self.driver.get(unquote_plus(
                 request.url))  # Decode url otherwise firefox is not happy. Ex /#%21/ => /#!/%21
