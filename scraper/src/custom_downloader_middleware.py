@@ -68,6 +68,8 @@ class CustomDownloaderMiddleware:
                 WebDriverWait(self.driver, 10).until(
                     expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
                 )
+            else:
+                print('skipped wait')
 
             body = self.driver.page_source.encode('utf-8')
             url = self.driver.current_url
