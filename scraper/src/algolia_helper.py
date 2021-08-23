@@ -46,4 +46,4 @@ class AlgoliaHelper:
     def commit_tmp_index(self):
         """Overwrite the real index with the temporary one"""
         # print("Update settings")
-        self.algolia_client.move_index(self.index_name_tmp, self.index_name)
+        # self.algolia_client.move_index(self.index_name_tmp, self.index_name)
