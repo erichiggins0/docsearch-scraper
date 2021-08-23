@@ -43,9 +43,11 @@ class CustomDownloaderMiddleware:
 
             tempId = "temp-docsearch-scraper-id"
 
-            if self.element_exists(HEADER_SPAN_XPATH.format('h1')):
+            h1_xpath = HEADER_SPAN_XPATH.format('h1')
+            h2_xpath = HEADER_SPAN_XPATH.format('h2')
+            if self.element_exists(h1_xpath):
                 self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h1_xpath, tempId))
-            elif self.element_exists(HEADER_SPAN_XPATH.format('h2')):
+            elif self.element_exists(h2_xpath):
                 self.driver.execute_script('document.evaluate("{}", document.getElementsByTagName("body").item(0)).iterateNext().id = "{}"'.format(h2_xpath, tempId))
 
             self.driver.get(unquote_plus(
