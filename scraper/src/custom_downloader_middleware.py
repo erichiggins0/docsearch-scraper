@@ -88,7 +88,7 @@ class CustomDownloaderMiddleware:
             )
         except:
             print(sys.exc_info())
-            return None
+            raise Exception()
 
     def element_exists(self, xpath):
         return len(self.driver.find_elements_by_xpath(xpath)) > 0
