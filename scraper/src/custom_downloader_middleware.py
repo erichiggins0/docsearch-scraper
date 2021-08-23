@@ -9,7 +9,6 @@ from urllib.parse import urlparse, unquote_plus
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from selenium.common.exceptions import NoSuchElementException
 import sys
 
 HEADER_SPAN_XPATH = "//section/article/{}//span"
@@ -65,10 +64,8 @@ class CustomDownloaderMiddleware:
             )
             if len(hash) > 0 and hash != '/':
                 WebDriverWait(self.driver, 10).until(
-                    expected_conditions.expected_conditions.text_to_be_present_in_element((By.XPATH, SIDEBAR_CONTENT_SELECTOR), self.driver.title)
+                    expected_conditions.text_to_be_present_in_element((By.XPATH, SIDEBAR_CONTENT_SELECTOR), self.driver.title)
                 )
-            else:
-                print('skipped wait')
 
             body = self.driver.page_source.encode('utf-8')
             url = self.driver.current_url
