@@ -59,19 +59,19 @@ class CustomDownloaderMiddleware:
             time.sleep(spider.js_wait)
 
             # Wait until old section has disappeared and new one is visible
-            WebDriverWait(self.driver, 10).until_not(
+            WebDriverWait(self.driver, 30).until_not(
                 expected_conditions.presence_of_element_located((By.ID, temp_content_id))
             )
-            WebDriverWait(self.driver, 10).until(
+            WebDriverWait(self.driver, 30).until(
                 expected_conditions.presence_of_element_located((By.XPATH, ARTICLE_CONTENT_SELECTOR))
             )
 
             hash = urlparse(request.url).fragment
             if len(hash) > 0 and hash != '/':
-                WebDriverWait(self.driver, 10).until_not(
+                WebDriverWait(self.driver, 30).until_not(
                     expected_conditions.presence_of_element_located((By.ID, temp_sidebar_id))
                 )
-                WebDriverWait(self.driver, 10).until(
+                WebDriverWait(self.driver, 30).until(
                     expected_conditions.presence_of_element_located((By.XPATH, SIDEBAR_CONTENT_SELECTOR))
                 )
 
